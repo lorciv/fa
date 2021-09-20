@@ -7,7 +7,7 @@ The starting point of failure analysis is a list of events. An Event is represen
 ```go
 type Event struct {
     Time float64
-	Type string // one of "ttf", "t+"
+    Type string // one of "ttf", "t+"
 }
 ```
 
@@ -60,8 +60,8 @@ func FitWeibull(points []Point) (w Weibull, r float64, err error) {
 
 ```go
 type Weibull struct {
-	Beta  float64 // shape parameter
-	Theta float64 // scale parameter
+    Beta  float64 // shape parameter
+    Theta float64 // scale parameter
 }
 ```
 
