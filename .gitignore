@@ -1,1 +1,4 @@
 .DS_Store
+cmd/fit/fit
+cmd/plotexp/plotexp
+cmd/plotweib/plotweib

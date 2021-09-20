@@ -56,27 +56,27 @@ func main() {
 		log.Fatalf("invalid method %q", *methodFlag)
 	}
 
-	if *verboseFlag {
-		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.AlignRight)
-		fmt.Fprintln(tw, "i\tt\tR(t)\t")
-		fmt.Fprintln(tw, "-\t-\t----\t")
-		for i, p := range points {
-			fmt.Fprintf(tw, "%d\t%.1f\t%.3f\t\n", i, p.X, p.Y)
-		}
-		tw.Flush()
-	}
-
-	w, r, err := fa.FitWeibull(points)
+	weib, r, err := fa.FitWeibull(points)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Weibull:\tbeta/theta/r = %f/%f/%f\n", w.Beta, w.Theta, r)
+	fmt.Printf("Weibull:\tbeta/theta/r = %f/%f/%f\n", weib.Beta, weib.Theta, r)
 
 	exp, r, err := fa.FitExponential(points)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("Exponential:\trate/r = %f/%f\n", exp.Rate, r)
+
+	if *verboseFlag {
+		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.AlignRight)
+		fmt.Fprintln(tw, "i\tt\tR(t)\tWeibull\tExp\t")
+		fmt.Fprintln(tw, "-\t-\t----\t-------\t---\t")
+		for i, p := range points {
+			fmt.Fprintf(tw, "%d\t%.1f\t%.3f\t%.3f\t%.3f\t\n", i, p.X, p.Y, weib.Survival(p.X), exp.Survival(p.X))
+		}
+		tw.Flush()
+	}
 }
 
 func parseEvent(s string) (fa.Event, error) {
